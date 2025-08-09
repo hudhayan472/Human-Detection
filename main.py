@@ -22,6 +22,24 @@ app = Flask(__name__)
 DEEPSTACK_URL = "http://localhost:5000/v1/vision/detection"  # Change if DeepStack runs elsewhere
 CONFIDENCE_THRESHOLD = 0.7
 
+# NVR configuration
+NVR_ENCRYPTION_PASSWORD = "abc12345"
+
+
+def configure_nvr():
+    """Prompt for NVR connection details and display them."""
+    print("NVR configuration (ISUP 5.0)")
+    print(f"Default encryption password: {NVR_ENCRYPTION_PASSWORD}")
+    server = input("Enter NVR server address: ")
+    port = input("Enter NVR port: ")
+    device_id = input("Enter NVR device ID: ")
+    print("\nConfiguration summary:")
+    print(f"  Server address: {server}")
+    print(f"  Port: {port}")
+    print(f"  Device ID: {device_id}")
+    print(f"  Encryption password: {NVR_ENCRYPTION_PASSWORD}")
+    return server, port, device_id
+
 # Queue for passing alarms from Flask thread to UI thread
 alarm_queue = queue.Queue()
 
@@ -157,6 +175,7 @@ def alarm():
         return "Error", 500
 
 if __name__ == '__main__':
+    configure_nvr()
     start_deepstack()
 
     flask_thread = threading.Thread(
